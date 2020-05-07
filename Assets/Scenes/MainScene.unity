@@ -257,9 +257,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f281e6fa0c3c89947a22aac9de1bc66d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entryContainer: {fileID: 0}
-  entryTemplate: {fileID: 0}
-  highscoreEntryTransformList: []
 --- !u!114 &51286631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1991,10 +1988,10 @@ MonoBehaviour:
   - platformPrefab: {fileID: 7656473463628911065, guid: 3a7ade6b1a4797b42947d61380594428,
       type: 3}
     probability: 100
-  - platformPrefab: {fileID: 2562580961923144525, guid: cd40d911bb843fb43875695c176169c5,
+  - platformPrefab: {fileID: 3865517340272779329, guid: 1833c24ac2bc018428c7c10281e65675,
       type: 3}
     probability: 10
-  - platformPrefab: {fileID: 6909737367546638721, guid: 1833c24ac2bc018428c7c10281e65675,
+  - platformPrefab: {fileID: 5319137923345795725, guid: cd40d911bb843fb43875695c176169c5,
       type: 3}
     probability: 15
   - platformPrefab: {fileID: 4180843781498979477, guid: e0d96d93704b5af42ba2018d43f11ea5,
