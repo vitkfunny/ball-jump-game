@@ -26,7 +26,7 @@ public class PlayerProperties : MonoBehaviour
     private bool _endOfSession;
     
     public PlayerRecordList records;
-    private readonly string _defaultPlayerName = "New Player " + Random.Range(0, 999999) + Random.Range(0, 999999);
+    private string _defaultPlayerName;
     public string playerName;
     
     private string _backendUrl = "https://backend-develop-rcppsocprq-ew.a.run.app";
@@ -43,6 +43,7 @@ public class PlayerProperties : MonoBehaviour
     
     void Awake()
     {
+        _defaultPlayerName = "New Player " + Random.Range(0, 999999) + Random.Range(0, 999999);
         playerName = PlayerPrefs.GetString("username", _defaultPlayerName);
         
         var jsonString = PlayerPrefs.GetString("recordsStorage");
