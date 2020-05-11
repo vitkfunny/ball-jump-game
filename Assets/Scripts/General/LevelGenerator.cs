@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 [System.Serializable]
@@ -68,10 +66,5 @@ public class LevelGenerator : MonoBehaviour
         }
 
         if (newPlatform != null) newPlatform.GetComponent<PlatformProperties>().SetLatest(true);
-    }
-
-    void Update()
-    {
-        
     }
 }
