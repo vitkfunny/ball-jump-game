@@ -25,6 +25,7 @@ public class PlayerProperties : MonoBehaviour
     private bool _endOfSession;
     
     public PlayerRecordList records;
+    public PlayerRecordList recordsOnline;
     private string _defaultPlayerName;
     public string playerName;
     
@@ -57,6 +58,8 @@ public class PlayerProperties : MonoBehaviour
                 RecordsList = new List<PlayerRecord>()
             };
         }
+
+        StartCoroutine(LoadOnlineScores());
     }
 
     private void Start()
@@ -176,5 +179,14 @@ public class PlayerProperties : MonoBehaviour
         request.SetRequestHeader("Content-Type", "application/json");
 
         yield return request.SendWebRequest();
+    }
+
+    IEnumerator LoadOnlineScores()
+    {
+        var request = UnityWebRequest.Get(_backendUrl + "/top");
+
+        yield return request.SendWebRequest();
+
+        recordsOnline = JsonUtility.FromJson<PlayerRecordList>(request.downloadHandler.text);
     }
 }
