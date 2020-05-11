@@ -179,6 +179,12 @@ public class PlayerProperties : MonoBehaviour
         request.SetRequestHeader("Content-Type", "application/json");
 
         yield return request.SendWebRequest();
+
+        if (request.downloadHandler.text == "Different device ID")
+        {
+            playerName = playerName + " " + Random.Range(0, 999999) + Random.Range(0, 999999);
+            StartCoroutine(SaveScoreOnline(score));
+        }
     }
 
     IEnumerator LoadOnlineScores()
