@@ -47,6 +47,8 @@ public class PlayerProperties : MonoBehaviour
                 RecordsList = new List<PlayerRecord>()
             };
         }
+        
+        AddRecord(0);
     }
 
     private void Start()
