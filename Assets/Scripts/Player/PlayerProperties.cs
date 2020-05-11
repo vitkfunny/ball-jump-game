@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -25,6 +27,8 @@ public class PlayerProperties : MonoBehaviour
     public PlayerRecordList records;
     private readonly string _defaultPlayerName = "New Player " + Random.Range(0, 999999) + Random.Range(0, 999999);
     private string _playerName;
+    
+    private string _backendUrl = "https://backend-develop-rcppsocprq-ew.a.run.app";
     
     [Serializable] 
     public class PlayerRecord {
@@ -103,16 +107,19 @@ public class PlayerProperties : MonoBehaviour
         var playerRecord = new PlayerRecord { score = playerScore, name = _playerName };
 
         var localId = GetRecord();
+        var saveScore = false;
         if (localId != -1)
         {
             if (records.RecordsList[localId].score < playerScore)
             {
                 records.RecordsList[localId].score = playerScore;
+                saveScore = true;
             }
         }
         else
         {
             records.RecordsList.Add(playerRecord);
+            saveScore = true;
         }
 
         for (int i = 0; i < records.RecordsList.Count; i++)
@@ -131,6 +138,11 @@ public class PlayerProperties : MonoBehaviour
         var json = JsonUtility.ToJson(records);
         PlayerPrefs.SetString("recordsStorage", json);
         PlayerPrefs.Save();
+
+        if (saveScore)
+        {
+            StartCoroutine(SaveScoreOnline(playerScore));
+        }
         
         SetBestScore();
     }
@@ -149,5 +161,19 @@ public class PlayerProperties : MonoBehaviour
             record = 0;
         }
         bestScoreText.text = "Best Score: " + record;
+    }
+
+    IEnumerator SaveScoreOnline(int score)
+    {
+        var data = new Dictionary<string, string>
+        {
+            ["name"] = _playerName, 
+            ["device_id"] = SystemInfo.deviceUniqueIdentifier, 
+            ["score"] = score.ToString()
+        };
+        
+        var saveRequest = UnityWebRequest.Post(_backendUrl + "/save", data);
+
+        yield return saveRequest.SendWebRequest();
     }
 }
