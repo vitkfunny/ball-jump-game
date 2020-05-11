@@ -49,7 +49,10 @@ public class PlayerProperties : MonoBehaviour
         {
             playerName = _defaultPlayerName;
         }
-        
+    }
+
+    private void Start()
+    {
         var jsonString = PlayerPrefs.GetString("recordsStorage");
         records = JsonUtility.FromJson<PlayerRecordList>(jsonString);
         if (records == null) {
@@ -60,10 +63,7 @@ public class PlayerProperties : MonoBehaviour
         }
 
         StartCoroutine(LoadOnlineScores());
-    }
-
-    private void Start()
-    {
+        
         _baseScore = transform.position.y;
         SetBestScore();
     }
