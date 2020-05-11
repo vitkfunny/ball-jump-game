@@ -43,12 +43,8 @@ public class PlayerProperties : MonoBehaviour
     
     void Awake()
     {
-        _defaultPlayerName = "New Player " + Random.Range(0, 999999) + Random.Range(0, 999999);
+        _defaultPlayerName = "Player " + Random.Range(0, 999) + Random.Range(0, 999);
         playerName = PlayerPrefs.GetString("username", _defaultPlayerName);
-        if (playerName == "New Player")
-        {
-            playerName = _defaultPlayerName;
-        }
     }
 
     private void Start()
@@ -182,7 +178,7 @@ public class PlayerProperties : MonoBehaviour
 
         if (request.downloadHandler.text == "Different device ID")
         {
-            playerName = playerName + " " + Random.Range(0, 999999) + Random.Range(0, 999999);
+            playerName = playerName + " " + Random.Range(0, 999) + Random.Range(0, 999);
             StartCoroutine(SaveScoreOnline(score));
         }
     }
