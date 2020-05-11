@@ -44,6 +44,10 @@ public class PlayerProperties : MonoBehaviour
     {
         _defaultPlayerName = "New Player " + Random.Range(0, 999999) + Random.Range(0, 999999);
         playerName = PlayerPrefs.GetString("username", _defaultPlayerName);
+        if (playerName == "New Player")
+        {
+            playerName = _defaultPlayerName;
+        }
         
         var jsonString = PlayerPrefs.GetString("recordsStorage");
         records = JsonUtility.FromJson<PlayerRecordList>(jsonString);
