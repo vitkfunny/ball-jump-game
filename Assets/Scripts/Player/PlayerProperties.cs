@@ -167,9 +167,9 @@ public class PlayerProperties : MonoBehaviour
     {
         var data = new Dictionary<string, string>
         {
-            ["name"] = _playerName, 
-            ["device_id"] = SystemInfo.deviceUniqueIdentifier, 
-            ["score"] = score.ToString()
+            {"name", _playerName}, 
+            {"device_id", SystemInfo.deviceUniqueIdentifier}, 
+            {"score", score.ToString()}
         };
         
         var saveRequest = UnityWebRequest.Post(_backendUrl + "/save", data);
