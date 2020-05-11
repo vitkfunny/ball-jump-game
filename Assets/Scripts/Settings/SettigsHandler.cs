@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class SettigsHandler : MonoBehaviour
@@ -7,7 +8,8 @@ public class SettigsHandler : MonoBehaviour
     public GameObject player;
     public InputField usernameField;
     public GameObject settingsPanel;
-    public GameObject recordsPanel;
+    public GameObject localRecordsPanel;
+    public GameObject onlineRecordsPanel;
 
     private PlayerProperties _playerProperties;
 
@@ -44,13 +46,23 @@ public class SettigsHandler : MonoBehaviour
         SceneManager.LoadScene("MainScene");
     }
 
-    public void OpenRecords()
+    public void OpenLocalRecords()
     {
-        recordsPanel.SetActive(true);
+        localRecordsPanel.SetActive(true);
     }
     
-    public void CloseRecords()
+    public void CloseLocalRecords()
     {
-        recordsPanel.SetActive(false);
+        localRecordsPanel.SetActive(false);
+    }
+    
+    public void OpenOnlineRecords()
+    {
+        onlineRecordsPanel.SetActive(true);
+    }
+    
+    public void CloseOnlineRecords()
+    {
+        onlineRecordsPanel.SetActive(false);
     }
 }
