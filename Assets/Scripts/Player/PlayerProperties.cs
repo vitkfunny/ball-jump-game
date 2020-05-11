@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -26,7 +27,7 @@ public class PlayerProperties : MonoBehaviour
     
     public PlayerRecordList records;
     private readonly string _defaultPlayerName = "New Player " + Random.Range(0, 999999) + Random.Range(0, 999999);
-    private string _playerName;
+    public string playerName;
     
     private string _backendUrl = "https://backend-develop-rcppsocprq-ew.a.run.app";
     
@@ -42,7 +43,7 @@ public class PlayerProperties : MonoBehaviour
     
     void Awake()
     {
-        _playerName = PlayerPrefs.GetString("username", _defaultPlayerName);
+        playerName = PlayerPrefs.GetString("username", _defaultPlayerName);
         
         var jsonString = PlayerPrefs.GetString("recordsStorage");
         records = JsonUtility.FromJson<PlayerRecordList>(jsonString);
@@ -93,7 +94,7 @@ public class PlayerProperties : MonoBehaviour
 
         for (var i = 0; i < records.RecordsList.Count; i++)
         {
-            if (records.RecordsList[i].name == _playerName)
+            if (records.RecordsList[i].name == playerName)
             {
                 localId = i;
                 break;
@@ -104,7 +105,7 @@ public class PlayerProperties : MonoBehaviour
     }
 
     private void AddRecord(int playerScore) {
-        var playerRecord = new PlayerRecord { score = playerScore, name = _playerName };
+        var playerRecord = new PlayerRecord { score = playerScore, name = playerName };
 
         var localId = GetRecord();
         var saveScore = false;
@@ -167,7 +168,7 @@ public class PlayerProperties : MonoBehaviour
     {
         var data = new Dictionary<string, string>
         {
-            {"name", _playerName}, 
+            {"name", playerName}, 
             {"device_id", SystemInfo.deviceUniqueIdentifier}, 
             {"score", score.ToString()}
         };
