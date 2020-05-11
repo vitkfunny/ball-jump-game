@@ -334,6 +334,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2a59d8e920f02f47b5668d391372482, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  online: 0
   player: {fileID: 1269385598}
   tableSize: 10
 --- !u!1 &77511159
@@ -1551,7 +1552,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &550065345
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4732,6 +4733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2a59d8e920f02f47b5668d391372482, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  online: 1
   player: {fileID: 1269385598}
   tableSize: 10
 --- !u!1 &2008253334
