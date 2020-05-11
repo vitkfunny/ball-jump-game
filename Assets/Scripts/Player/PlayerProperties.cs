@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -54,8 +53,6 @@ public class PlayerProperties : MonoBehaviour
                 RecordsList = new List<PlayerRecord>()
             };
         }
-        
-        AddRecord(0);
     }
 
     private void Start()
@@ -109,16 +106,11 @@ public class PlayerProperties : MonoBehaviour
         var playerRecord = new PlayerRecord { score = playerScore, name = playerName };
 
         var localId = GetRecord();
-        var saveScore = playerScore;
         if (localId != -1)
         {
             if (records.RecordsList[localId].score < playerScore)
             {
                 records.RecordsList[localId].score = playerScore;
-            }
-            else
-            {
-                saveScore = records.RecordsList[localId].score;
             }
         }
         else
@@ -142,8 +134,6 @@ public class PlayerProperties : MonoBehaviour
         var json = JsonUtility.ToJson(records);
         PlayerPrefs.SetString("recordsStorage", json);
         PlayerPrefs.Save();
-
-        StartCoroutine(SaveScoreOnline(saveScore));
         
         SetBestScore();
     }
@@ -162,6 +152,7 @@ public class PlayerProperties : MonoBehaviour
             record = 0;
         }
         bestScoreText.text = "Best Score: " + record;
+        StartCoroutine(SaveScoreOnline(record));
     }
 
     IEnumerator SaveScoreOnline(int score)
@@ -172,6 +163,8 @@ public class PlayerProperties : MonoBehaviour
             {"device_id", SystemInfo.deviceUniqueIdentifier}, 
             {"score", score.ToString()}
         };
+        
+        Debug.Log(data);
         
         var saveRequest = UnityWebRequest.Post(_backendUrl + "/save", data);
 
