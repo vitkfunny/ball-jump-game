@@ -109,19 +109,21 @@ public class PlayerProperties : MonoBehaviour
         var playerRecord = new PlayerRecord { score = playerScore, name = playerName };
 
         var localId = GetRecord();
-        var saveScore = false;
+        var saveScore = playerScore;
         if (localId != -1)
         {
             if (records.RecordsList[localId].score < playerScore)
             {
                 records.RecordsList[localId].score = playerScore;
-                saveScore = true;
+            }
+            else
+            {
+                saveScore = records.RecordsList[localId].score;
             }
         }
         else
         {
             records.RecordsList.Add(playerRecord);
-            saveScore = true;
         }
 
         for (int i = 0; i < records.RecordsList.Count; i++)
@@ -141,10 +143,7 @@ public class PlayerProperties : MonoBehaviour
         PlayerPrefs.SetString("recordsStorage", json);
         PlayerPrefs.Save();
 
-        if (saveScore)
-        {
-            StartCoroutine(SaveScoreOnline(playerScore));
-        }
+        StartCoroutine(SaveScoreOnline(saveScore));
         
         SetBestScore();
     }
