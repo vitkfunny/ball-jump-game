@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class PlayerProperties : MonoBehaviour
 {
@@ -23,7 +23,8 @@ public class PlayerProperties : MonoBehaviour
     private bool _endOfSession;
     
     public PlayerRecordList records;
-    public string playerName = "New Player";
+    private readonly string _defaultPlayerName = "New Player " + Random.Range(0, 999999) + Random.Range(0, 999999);
+    private string _playerName;
     
     [Serializable] 
     public class PlayerRecord {
@@ -37,7 +38,7 @@ public class PlayerProperties : MonoBehaviour
     
     void Awake()
     {
-        playerName = PlayerPrefs.GetString("username", playerName);
+        _playerName = PlayerPrefs.GetString("username", _defaultPlayerName);
         
         var jsonString = PlayerPrefs.GetString("recordsStorage");
         records = JsonUtility.FromJson<PlayerRecordList>(jsonString);
@@ -88,7 +89,7 @@ public class PlayerProperties : MonoBehaviour
 
         for (var i = 0; i < records.RecordsList.Count; i++)
         {
-            if (records.RecordsList[i].name == playerName)
+            if (records.RecordsList[i].name == _playerName)
             {
                 localId = i;
                 break;
@@ -99,7 +100,7 @@ public class PlayerProperties : MonoBehaviour
     }
 
     private void AddRecord(int playerScore) {
-        var playerRecord = new PlayerRecord { score = playerScore, name = playerName };
+        var playerRecord = new PlayerRecord { score = playerScore, name = _playerName };
 
         var localId = GetRecord();
         if (localId != -1)
