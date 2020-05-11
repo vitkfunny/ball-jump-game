@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.Networking;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class PlayerProperties : MonoBehaviour
 {
@@ -23,7 +25,11 @@ public class PlayerProperties : MonoBehaviour
     private bool _endOfSession;
     
     public PlayerRecordList records;
-    public string playerName = "New Player";
+    public PlayerRecordList recordsOnline;
+    private string _defaultPlayerName;
+    public string playerName;
+    
+    private string _backendUrl = "https://backend-develop-rcppsocprq-ew.a.run.app";
     
     [Serializable] 
     public class PlayerRecord {
@@ -37,8 +43,12 @@ public class PlayerProperties : MonoBehaviour
     
     void Awake()
     {
-        playerName = PlayerPrefs.GetString("username", playerName);
-        
+        _defaultPlayerName = "Player " + Random.Range(0, 999) + Random.Range(0, 999);
+        playerName = PlayerPrefs.GetString("username", _defaultPlayerName);
+    }
+
+    private void Start()
+    {
         var jsonString = PlayerPrefs.GetString("recordsStorage");
         records = JsonUtility.FromJson<PlayerRecordList>(jsonString);
         if (records == null) {
@@ -47,10 +57,9 @@ public class PlayerProperties : MonoBehaviour
                 RecordsList = new List<PlayerRecord>()
             };
         }
-    }
 
-    private void Start()
-    {
+        StartCoroutine(LoadOnlineScores());
+        
         _baseScore = transform.position.y;
         SetBestScore();
     }
@@ -146,5 +155,40 @@ public class PlayerProperties : MonoBehaviour
             record = 0;
         }
         bestScoreText.text = "Best Score: " + record;
+        StartCoroutine(SaveScoreOnline(record));
+    }
+    
+    [Serializable]
+    public class UserDataOnline
+    {
+        public string name;
+        public string device_id;
+        public int score;
+    }
+
+    IEnumerator SaveScoreOnline(int score)
+    {
+        var userData = new UserDataOnline { name=playerName, device_id=SystemInfo.deviceUniqueIdentifier, score=score };
+        var jsonData = JsonUtility.ToJson(userData);
+        
+        var request = UnityWebRequest.Put(_backendUrl + "/save", jsonData);
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        yield return request.SendWebRequest();
+
+        if (request.downloadHandler.text == "Different device ID")
+        {
+            playerName = playerName + " " + Random.Range(0, 999) + Random.Range(0, 999);
+            StartCoroutine(SaveScoreOnline(score));
+        }
+    }
+
+    IEnumerator LoadOnlineScores()
+    {
+        var request = UnityWebRequest.Get(_backendUrl + "/top");
+
+        yield return request.SendWebRequest();
+
+        recordsOnline = JsonUtility.FromJson<PlayerRecordList>(request.downloadHandler.text);
     }
 }

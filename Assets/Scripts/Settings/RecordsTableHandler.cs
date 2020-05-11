@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class RecordsTableHandler : MonoBehaviour
 {
+    public bool online;
     public GameObject player;
     
     private Transform _entryContainer;
@@ -40,7 +41,15 @@ public class RecordsTableHandler : MonoBehaviour
 
         _entryTemplate.gameObject.SetActive(false);
 
-        var highscores = playerProperties.records;
+        PlayerProperties.PlayerRecordList highscores;
+        if (online)
+        {
+            highscores = playerProperties.recordsOnline;
+        }
+        else
+        {
+            highscores = playerProperties.records;
+        }
 
         _highscoreEntryTransformList = new List<Transform>();
         var tableLimit = (highscores.RecordsList.Count > tableSize) ? tableSize : highscores.RecordsList.Count;
