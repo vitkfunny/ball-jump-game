@@ -1617,7 +1617,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1929600757}
-        m_MethodName: CloseLocalRecords
+        m_MethodName: CloseOnlineRecords
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4256,7 +4256,7 @@ MonoBehaviour:
   usernameField: {fileID: 478767082}
   settingsPanel: {fileID: 2128719060}
   localRecordsPanel: {fileID: 2054455962}
-  onlineRecordsPanel: {fileID: 0}
+  onlineRecordsPanel: {fileID: 550065344}
 --- !u!1 &1940154962
 GameObject:
   m_ObjectHideFlags: 0
