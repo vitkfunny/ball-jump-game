@@ -154,20 +154,23 @@ public class PlayerProperties : MonoBehaviour
         bestScoreText.text = "Best Score: " + record;
         StartCoroutine(SaveScoreOnline(record));
     }
+    
+    [Serializable]
+    public class UserDataOnline
+    {
+        public string name;
+        public string device_id;
+        public int score;
+    }
 
     IEnumerator SaveScoreOnline(int score)
     {
-        var data = new Dictionary<string, string>
-        {
-            {"name", playerName}, 
-            {"device_id", SystemInfo.deviceUniqueIdentifier}, 
-            {"score", score.ToString()}
-        };
+        var userData = new UserDataOnline { name=playerName, device_id=SystemInfo.deviceUniqueIdentifier, score=score };
+        var jsonData = JsonUtility.ToJson(userData);
         
-        Debug.Log(data);
-        
-        var saveRequest = UnityWebRequest.Post(_backendUrl + "/save", data);
+        var request = UnityWebRequest.Put(_backendUrl + "/save", jsonData);
+        request.SetRequestHeader("Content-Type", "application/json");
 
-        yield return saveRequest.SendWebRequest();
+        yield return request.SendWebRequest();
     }
 }
