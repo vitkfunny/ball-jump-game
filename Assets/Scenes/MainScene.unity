@@ -3116,6 +3116,7 @@ MonoBehaviour:
   maxScore: 0
   scoreMultiplier: 5
   playerName: New Player
+  usernameField: {fileID: 478767082}
 --- !u!1 &1300233869
 GameObject:
   m_ObjectHideFlags: 0

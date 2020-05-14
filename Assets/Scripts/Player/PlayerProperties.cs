@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -30,6 +31,8 @@ public class PlayerProperties : MonoBehaviour
     public string playerName;
     
     private string _backendUrl = "https://backend-develop-rcppsocprq-ew.a.run.app";
+
+    public InputField usernameField;
     
     [Serializable] 
     public class PlayerRecord {
@@ -44,7 +47,7 @@ public class PlayerProperties : MonoBehaviour
     void Awake()
     {
         _defaultPlayerName = "Player " + Random.Range(0, 999) + Random.Range(0, 999);
-        playerName = GetPlayerName(_defaultPlayerName);
+        SetPlayerName(GetPlayerName(_defaultPlayerName));
     }
 
     private void Start()
@@ -89,9 +92,17 @@ public class PlayerProperties : MonoBehaviour
         _endOfSession = true;
     }
 
-    private string GetPlayerName(string defaultName)
+    private string GetPlayerName(string defaultName = "Player")
     {
         return PlayerPrefs.GetString("username", defaultName);
+    }
+
+    private void SetPlayerName(string newName)
+    {
+        playerName = newName;
+        PlayerPrefs.SetString("username", newName);
+        PlayerPrefs.Save();
+        usernameField.text = newName;
     }
     
     private int GetRecord()
@@ -183,7 +194,7 @@ public class PlayerProperties : MonoBehaviour
 
         if (request.downloadHandler.text == "Different device ID")
         {
-            playerName = playerName + " " + Random.Range(0, 999) + Random.Range(0, 999);
+            SetPlayerName(playerName + " " + Random.Range(0, 999) + Random.Range(0, 999));
             StartCoroutine(SaveScoreOnline(score));
         }
     }
