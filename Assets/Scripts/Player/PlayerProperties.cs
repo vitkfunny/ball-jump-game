@@ -64,7 +64,7 @@ public class PlayerProperties : MonoBehaviour
         StartCoroutine(LoadOnlineScores());
         
         _baseScore = transform.position.y;
-        SetBestScore();
+        StartCoroutine(SaveScore(0));
     }
 
     private void FixedUpdate()
@@ -76,7 +76,7 @@ public class PlayerProperties : MonoBehaviour
         
         if ((!win && !lose) || _endOfSession) return;
         
-        AddRecord(maxScore);
+        StartCoroutine(SaveScore(maxScore));
 
         if (win)
         {
@@ -137,6 +137,13 @@ public class PlayerProperties : MonoBehaviour
             records.RecordsList.Add(playerRecord);
         }
 
+        SaveLocalScores();
+
+        SetBestScore();
+    }
+
+    private void SaveLocalScores()
+    {
         for (int i = 0; i < records.RecordsList.Count; i++)
         {
             for (int k = i + 1; k < records.RecordsList.Count; k++)
@@ -153,8 +160,6 @@ public class PlayerProperties : MonoBehaviour
         var json = JsonUtility.ToJson(records);
         PlayerPrefs.SetString("recordsStorage", json);
         PlayerPrefs.Save();
-        
-        SetBestScore();
     }
 
     private void SetBestScore()
@@ -171,7 +176,6 @@ public class PlayerProperties : MonoBehaviour
             record = 0;
         }
         bestScoreText.text = "Best Score: " + record;
-        StartCoroutine(SaveScoreOnline(record));
     }
     
     [Serializable]
@@ -182,7 +186,7 @@ public class PlayerProperties : MonoBehaviour
         public int score;
     }
 
-    IEnumerator SaveScoreOnline(int score)
+    IEnumerator SaveScore(int score)
     {
         var userData = new UserDataOnline { name=playerName, device_id=SystemInfo.deviceUniqueIdentifier, score=score };
         var jsonData = JsonUtility.ToJson(userData);
@@ -192,10 +196,15 @@ public class PlayerProperties : MonoBehaviour
 
         yield return request.SendWebRequest();
 
-        if (request.downloadHandler.text == "Different device ID")
+        var result = request.downloadHandler.text;
+        if (result == "Different device ID")
         {
-            SetPlayerName(playerName + " " + Random.Range(0, 999) + Random.Range(0, 999));
-            StartCoroutine(SaveScoreOnline(score));
+            SetPlayerName(playerName + " " + Random.Range(0, 999));
+            StartCoroutine(SaveScore(score));
+        }
+        else
+        {
+            AddRecord(score);
         }
     }
 
