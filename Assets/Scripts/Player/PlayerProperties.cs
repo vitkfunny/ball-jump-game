@@ -44,7 +44,7 @@ public class PlayerProperties : MonoBehaviour
     void Awake()
     {
         _defaultPlayerName = "Player " + Random.Range(0, 999) + Random.Range(0, 999);
-        playerName = PlayerPrefs.GetString("username", _defaultPlayerName);
+        playerName = GetPlayerName(_defaultPlayerName);
     }
 
     private void Start()
@@ -87,6 +87,11 @@ public class PlayerProperties : MonoBehaviour
         
         restartButton.SetActive(true);
         _endOfSession = true;
+    }
+
+    private string GetPlayerName(string defaultName)
+    {
+        return PlayerPrefs.GetString("username", defaultName);
     }
     
     private int GetRecord()
