@@ -43,7 +43,7 @@ jobs:
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
           versioning: Custom  # TODO use "tag" versioning
-          version: 0.0.2
+          version: 0.0.3
       - uses: actions/upload-artifact@v1  # TODO replace with Firebase distribution
         with:
           name: Build
