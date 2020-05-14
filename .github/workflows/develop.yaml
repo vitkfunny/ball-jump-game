@@ -9,6 +9,7 @@ env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
 jobs:
+  # TODO add versioning
   buildForPlatformsMatrix:
     name: Build for ${{ matrix.targetPlatform }} on version ${{ matrix.unityVersion }}
     runs-on: ubuntu-latest
@@ -41,9 +42,9 @@ jobs:
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
-          versioning: Custom
+          versioning: Custom  # TODO use "tag" versioning
           version: 0.0.2
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v1  # TODO replace with Firebase distribution
         with:
           name: Build
           path: build
