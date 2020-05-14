@@ -3,7 +3,9 @@ name: Build project
 on:
   push:
     branches:
-      - develop
+      - feature/*
+      - bugfix/*
+      - chore/*
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
