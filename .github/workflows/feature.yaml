@@ -3,13 +3,14 @@ name: Build project
 on:
   push:
     branches:
-      - develop
+      - feature/*
+      - bugfix/*
+      - chore/*
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
 
 jobs:
-  # TODO add versioning
   buildForPlatformsMatrix:
     name: Build for ${{ matrix.targetPlatform }} on version ${{ matrix.unityVersion }}
     runs-on: ubuntu-latest
@@ -42,9 +43,9 @@ jobs:
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
-          versioning: Custom  # TODO use "tag" versioning
+          versioning: Custom
           version: 0.0.3
-      - uses: actions/upload-artifact@v1  # TODO replace with Firebase distribution
+      - uses: actions/upload-artifact@v1
         with:
           name: Build
           path: build
